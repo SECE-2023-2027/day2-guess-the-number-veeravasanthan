@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Guess My Number</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 {
+      font-size: 3rem;
+    }
+    .game-box {
+      background-color: #111;
+      padding: 30px;
+      border-radius: 15px;
+      display: inline-block;
+      margin-top: 30px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);}
+    input[type="number"] {
+      padding: 10px;
+      font-size: 1rem;
+      width: 80px;
+      background: #222;
+      border: 1px solid #555;
+      color: #fff;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #27ae60;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    button:hover {
+      background-color: #1e8449;
+    }
+    .message {
+      margin-top: 20px;
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎲 Guess My Number!</h1>
+  <p>I'm thinking of a number between <strong>1 and 100</strong>. Can you guess it?</p>
+
+  <div class="game-box">
+    <input type="number" id="guessInput" min="1" max="100" />
+    <button onclick="checkGuess()">Submit</button>
+    <button onclick="resetGame()">Reset</button>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    let secretNumber = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
+    const guessInput = document.getElementById("guessInput");
+    const messageEl = document.getElementById("message");
+
+    function checkGuess() {
+      const guess = Number(guessInput.value.trim());
+      guessInput.value = "";
+      if (!guess || guess < 1 || guess > 100) {
+        messageEl.textContent = "⛔ Please enter a number between 1 and 100.";
+        return;
+      }
+      attempts++;
+      if (guess === secretNumber) {
+        messageEl.textContent = `🎉 Correct! You guessed it in ${attempts} tries! 🎯`;
+        document.body.style.backgroundColor = "#2ecc71";
+        guessInput.disabled = true;
+      }         else {
+        messageEl.textContent =
+          guess < secretNumber ? "📈 Too low. Try again!" : "📉 Too high. Try again!";
+      }
+    }
+    function resetGame() {
+      secretNumber = Math.floor(Math.random() * 100) + 1;
+      attempts = 0;
+      messageEl.textContent = "";
+      guessInput.disabled = false;
+      guessInput.value = "";
+      document.body.style.backgroundColor = "#000";
+    }
+    guessInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        checkGuess();
+      }
+    });
+  </script>
+</body>
+</html>
